@@ -10,7 +10,7 @@ dbclient = motor.AsyncIOMotorClient(
     config["database"]["address"], config["database"]["port"]
 )
 
-db = dbclient.tjdb
+db = dbclient.assacdb
 
 D_users = db.users
 
