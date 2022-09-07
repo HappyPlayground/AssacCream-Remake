@@ -19,7 +19,7 @@ class General(commands.Cog):
             )
             cmd = self.bot.get_command(command)
             embed.add_field(
-                name=
+                name=command.
             )
         
         embed.set_footer(
@@ -27,6 +27,14 @@ class General(commands.Cog):
             icon_url=ctx.author.display_avatar.url
         )
         await ctx.send(embed=embed)
+    
+    @commands.command(
+        name="가입",
+        aliases=[],
+        extras=ad_help_formater()
+    )
+    async def register_user(self, ctx):
+        embed = discord.Embed()
 
     
 
