@@ -5,6 +5,7 @@ import discord
 from discord.ext import tasks
 from rich.logging import RichHandler
 from tools.bot import Cream
+from tools.core import AssacCore
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -13,7 +14,7 @@ logging.basicConfig(
 )
 
 logging.getLogger("discord").setLevel(logging.INFO)
-
+logging.getLogger("AssacCore").setLevel(logging.INFO)
 
 @tasks.loop(seconds=30)
 async def change_pr():
