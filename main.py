@@ -14,12 +14,14 @@ logging.basicConfig(
 )
 
 logging.getLogger("discord").setLevel(logging.INFO)
+
 logging.getLogger("AssacCore").setLevel(logging.INFO)
+
 
 @tasks.loop(seconds=30)
 async def change_pr():
     status = discord.Game(
-        name=f'{random.choice(bot.command_prefix)}help - {len(bot.guilds)} 서버에서 사용중이에요!'
+        name=f"{random.choice(bot.command_prefix)}help - {len(bot.guilds)} 서버에서 사용중이에요!"
     )
     await bot.change_presence(activity=status)
 
@@ -31,8 +33,7 @@ class Assac(Cream):
     async def on_ready(self):
         self.loop.create_task(change_pr())
 
-        if self.config["debug"]:
-            await self.load_extension("jishaku")
+        await self.load_extension("jishaku")
 
         if self.config["cogs"]:
             [await self.load_extension(f"cogs.{i}") for i in self.config["cogs"]]
