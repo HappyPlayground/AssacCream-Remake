@@ -78,25 +78,36 @@ class AssacCore():
                     
         return result
 
-    async def updateData(self, data: dict, user_id: Union[int, discord.Member, discord.User]):
-        user_id = user_id if isinstance(user_id, int) else user_id.id
+    async def Update_Data(self, type:str, content_id: Union[int, Any], data: dict):
+        try:
+            content_id = content_id if isinstance(content_id, int) else content_id.id
+            type = data_options[type]
+        except:
+            return None
         
-        user_data = await self.getUser(user_id)
+        if type == "all":
+            return None
+        
+        content_data = await self.Get_Data(content_id)
 
         if "_id" not in data.keys():
-            data["_id"] = user_id
+            data["_id"] = content_id
         
-        data = dict(user_data, **data)
+        data = dict(content_data, **data)
         
-        self.data["u_"+user_id] = data
+        self.data[type+content_id] = data
         
         log.info("데이터를 업데이트 하였습니다.")
         
         return data
         
-    def clearData(self):
+    def Clear_Data(self,options: str = "all"):
         if not self.data:
-            self.data = {}
+            if options == "all":
+                self.data = {}
+            else:
+                options = data_options[options]
+                self.data = dict(filter(lambda e:not e[:2].startswith(options), self.data.keys()))
         
         log.info("데이터를 초기화 하였습니다.")
         

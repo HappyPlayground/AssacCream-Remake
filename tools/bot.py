@@ -3,6 +3,7 @@ import struct
 import discord
 from discord.ext import commands
 
+from tools.core import AssacCore
 from tools.config import config
 
 intents=discord.Intents.all()
@@ -21,6 +22,8 @@ class Cream(commands.Bot):
             strip_after_prefix=True,
         )
         self.config = config
+        
+        self.core = AssacCore(self)
 
         self.color = int(bytes.hex(struct.pack("BBB", *tuple(config["color"]))), 16)
 
@@ -44,6 +47,10 @@ class Cream(commands.Bot):
     async def process_commands(self, message):
         if message.author.bot:
             return
+        
         ctx = await self.get_context(message, cls=commands.Context)
+        if ctx.command:
+            if ctx.command.extras.get("bypass") != True:
+                return
         
         return await self.invoke(ctx)
