@@ -6,7 +6,9 @@ from discord.ext import commands
 from tools.config import config
 
 intents=discord.Intents.all()
+
 intents.members = True
+
 intents.presences = True
 
 class Cream(commands.Bot):
@@ -25,6 +27,7 @@ class Cream(commands.Bot):
     async def on_message_error(self, ctx, error):
         if isinstance(error, commands.NotOwner):
             await ctx.send("관리자가 아니시네요!")
+            
         elif isinstance(error, commands.CommandNotFound):
             pass
 

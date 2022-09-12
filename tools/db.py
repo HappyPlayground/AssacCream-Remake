@@ -14,3 +14,5 @@ db = dbclient.assacdb
 
 D_users = db.users
 
+D_guilds = db.guilds
+

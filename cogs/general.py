@@ -33,8 +33,10 @@ class General(commands.Cog):
         aliases=[],
         extras=ad_help_formater()
     )
+    @commands.cooldown(rate=1, per=600.0, type=commands.BucketType.user)
     async def register_user(self, ctx):
         embed = discord.Embed()
+        msg = await ctx.send(embed=embed, view=view)
 
     
 
