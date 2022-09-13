@@ -3,6 +3,7 @@ from discord.ext import commands
 from logging import getLogger
 from tools.db import D_users, D_guilds
 from typing import Any, Union
+from discord.ext import tasks
 
 log = getLogger(__name__)
 
@@ -22,10 +23,6 @@ class AssacCore:
         self.version = "0.0.1"
         self.client = client
         self.data = {}
-
-        self.loop = asyncio.get_event_loop()
-
-        self.loop.create_task(self.AutomaticApplyData())
 
     async def Get_Data(self, content_id: Union[int, Any], type: str):
         try:
@@ -49,17 +46,13 @@ class AssacCore:
 
         return user
 
+    @tasks.loop(minutes=10)
     async def AutomaticApplyData(self):
 
         await self.client.wait_until_ready()
 
-        await asyncio.sleep(300)
-
         while not self.client.is_closed():
-
             await self.Apply_Data("all")
-
-            await asyncio.sleep(300)
 
     async def Apply_Data(self, options: str = "all") -> bool:
         if options not in [*data_options.keys()]:
@@ -82,13 +75,15 @@ class AssacCore:
 
             result = True
 
-        await self.Clear_Data(options)
+        self.Clear_Data(options)
 
         log.info("데이터를 적용 하였습니다.")
 
         return result
 
-    async def Update_Data(self, type: str, content_id: Union[int, Any], data: dict):
+    async def Update_Data(
+        self, type: str, content_id: Union[int, Any], data: dict, isDelete: bool = False
+    ):
         try:
             content_id = content_id if isinstance(content_id, int) else content_id.id
             type = data_options[type]
@@ -101,12 +96,16 @@ class AssacCore:
         content_data = await self.Get_Data(content_id, type)
 
         if not content_data:
-            content_data = {}
+            for i in data.keys():
+                content_data.pop(i, None)
 
         if "_id" not in data.keys():
             data["_id"] = content_id
 
-        data = dict(content_data, **data)
+        if isDelete:
+            data = content_data
+        else:
+            data = dict(content_data, **data)
 
         self.data[type + str(content_id)] = data
 

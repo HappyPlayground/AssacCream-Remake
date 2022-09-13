@@ -31,7 +31,9 @@ class Assac(Cream):
         super().__init__()
 
     async def on_ready(self):
+
         self.loop.create_task(change_pr())
+        self.loop.create_task(self.core.AutomaticApplyData())
 
         await self.load_extension("jishaku")
 
