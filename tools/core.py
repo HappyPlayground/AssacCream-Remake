@@ -80,7 +80,28 @@ class AssacCore:
         log.info("데이터를 적용 하였습니다.")
 
         return result
-
+    
+    async def Delete_Data(
+       self, type: str, content_id: Union[int, Any], data: dict, ispermanent: bool = False
+    ):
+        try:
+            content_id = content_id if instance(content_id, int) else content_id.id
+            type = data_options[type]
+        except:
+            return None
+        
+        if type == "all":
+            return None
+        
+        content_data = await self.Get_data(content_id, type)
+        
+        if not content_data:
+            return None
+        else:
+            self.data[content_id]
+    
+    def isCached(self, type:str, content_id: Union[int, Any]):
+        if 
     async def Update_Data(
         self, type: str, content_id: Union[int, Any], data: dict, isDelete: bool = False
     ):
